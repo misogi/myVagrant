@@ -97,8 +97,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :chef_solo do |chef|
     chef.run_list = [
-      "mysql::client",
-      "mysql::server"
+      "yums"
     ]
 
     chef.json = {
