@@ -11,6 +11,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "fedora19"
+  config.berkshelf.enabled = true
+  config.omnibus.chef_version = :latest
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
@@ -92,6 +94,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   # You may also specify custom JSON attributes:
   #   chef.json = { :mysql_password => "foo" }
   # end
+
+  config.vm.provision :chef_solo do |chef|
+    chef.run_list = [
+      "mysql::client",
+      "mysql::server"
+    ]
+
+    chef.json = {
+      mysql: {
+        server_root_password: "root",
+        server_repl_password: "root",
+        server_debian_password: "root",
+        bind_address: "127.0.0.1"
+      }
+    }
+  end
 
   # Enable provisioning with chef server, specifying the chef server URL,
   # and the path to the validation key (relative to this Vagrantfile).
